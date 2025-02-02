@@ -2,9 +2,14 @@ package com.phasmidsoftware.dsaipg.adt.threesum;
 
 import org.junit.Test;
 
+import com.phasmidsoftware.dsaipg.util.Stopwatch;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -99,5 +104,56 @@ public class ThreeSumTest {
         System.out.println("triples: " + Arrays.toString(triples));
         assertEquals(4, triples.length);
         assertEquals(4, new ThreeSumCubic(ints).getTriples().length);
+    }
+    
+    @Test
+    public void timingTestCubic() {
+        for (int n = 100; n <= 2000; n *= 2) {
+            int[] testArray = new int[n];
+            for (int i = 0; i < n; i++) {
+                testArray[i] = ThreadLocalRandom.current().nextInt(-1000, 1000);
+            }
+
+            try (Stopwatch stopwatch = new Stopwatch()) {
+                ThreeSumCubic cubic = new ThreeSumCubic(testArray);
+                cubic.getTriples();
+                long elapsedTime = stopwatch.lap();
+                System.out.println("Cubic algorithm time for n = " + n + " is " + elapsedTime + " ms");
+            }
+        }
+    }
+
+    @Test
+    public void timingTestQuadratic() {
+        for (int n = 100; n <= 2000; n *= 2) {
+            int[] testArray = new int[n];
+            for (int i = 0; i < n; i++) {
+                testArray[i] = ThreadLocalRandom.current().nextInt(-1000, 1000);
+            }
+
+            try (Stopwatch stopwatch = new Stopwatch()) {
+                ThreeSumQuadratic quadratic = new ThreeSumQuadratic(testArray);
+                quadratic.getTriples();
+                long elapsedTime = stopwatch.lap();
+                System.out.println("Quadratic algorithm time for n = " + n + " is " + elapsedTime + " ms");
+            }
+        }
+    }
+
+    @Test
+    public void timingTestQuadrithmic() {
+        for (int n = 100; n <= 2000; n *= 2) {
+            int[] testArray = new int[n];
+            for (int i = 0; i < n; i++) {
+                testArray[i] = ThreadLocalRandom.current().nextInt(-1000, 1000);
+            }
+
+            try (Stopwatch stopwatch = new Stopwatch()) {
+                ThreeSumQuadrithmic quadrithmic = new ThreeSumQuadrithmic(testArray);
+                quadrithmic.getTriples();
+                long elapsedTime = stopwatch.lap();
+                System.out.println("Quadrithmic algorithm time for n = " + n + " is " + elapsedTime + " ms");
+            }
+        }
     }
 }

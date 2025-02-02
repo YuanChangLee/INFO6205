@@ -13,6 +13,11 @@ import java.util.Random;
  * experiments can be performed to compute average distances.
  */
 public class RandomWalk {
+	
+    private int x=0; // Current x location of the drunkard
+    private int y=0; // Current y location of the drunkard
+    
+    private final Random random = new Random();
 
     /**
      * Method to compute the distance from the origin (the lamp-post where the drunkard starts) to his current position.
@@ -21,7 +26,7 @@ public class RandomWalk {
      */
     public double distance() {
         // TO BE IMPLEMENTED 
-         return 0.0;
+        return Math.sqrt((long)x*x + (long)y*y);
         // END SOLUTION
     }
 
@@ -33,7 +38,8 @@ public class RandomWalk {
      */
     private void move(int dx, int dy) {
         // TO BE IMPLEMENTED  do move
-         throw new RuntimeException("Not implemented");
+        x = x + dx; // update x location
+        y = y + dy; // update y location
         // END SOLUTION
     }
 
@@ -43,8 +49,10 @@ public class RandomWalk {
      * @param m the number of steps the drunkard takes
      */
     private void randomWalk(int m) {
-        // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+    	 
+        for(int i=0;i<m;i++) {
+            randomMove(); // take one random step
+        }
     }
 
     /**
@@ -52,16 +60,11 @@ throw new RuntimeException("implementation missing");
      * That's to say, moves can be (+-1, 0) or (0, +-1).
      */
     private void randomMove() {
-        boolean ns = random.nextBoolean();
-        int step = random.nextBoolean() ? 1 : -1;
+        boolean ns = random.nextBoolean(); // if it is true, move on the y axis, false move on the x axis.
+        int step = random.nextBoolean() ? 1 : -1; // if it is true, positive direction, false negative direction.
         move(ns ? step : 0, ns ? 0 : step);
     }
-
-    private int x = 0;
-    private int y = 0;
-
-    private final Random random = new Random();
-
+    
     /**
      * Perform multiple random walk experiments, returning the mean distance.
      *
@@ -73,10 +76,10 @@ throw new RuntimeException("implementation missing");
         double totalDistance = 0;
         for (int i = 0; i < n; i++) {
             RandomWalk walk = new RandomWalk();
-            walk.randomWalk(m);
-            totalDistance = totalDistance + walk.distance();
+            walk.randomWalk(m); // Simulate m steps
+            totalDistance = totalDistance + walk.distance(); // add the resulting distance to the total 
         }
-        return totalDistance / n;
+        return totalDistance / n; // Return the average distance
     }
 
     /**
@@ -90,12 +93,12 @@ throw new RuntimeException("implementation missing");
      *             If args is empty, the method throws a RuntimeException indicating invalid syntax.
      */
     public static void main(String[] args) {
-        if (args.length == 0)
-            throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
-        int m = Integer.parseInt(args[0]);
-        int n = 30;
-        if (args.length > 1) n = Integer.parseInt(args[1]);
-        double meanDistance = randomWalkMulti(m, n);
-        System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
-    }
+        int [] stepValues = {10,20,30,40,50,60};
+        int n = 100;
+        for(int i=0;i<stepValues.length;i++) {
+            int m = stepValues[i];
+            double meanDistance = randomWalkMulti(m,n);
+            System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+        }
+        }
 }
