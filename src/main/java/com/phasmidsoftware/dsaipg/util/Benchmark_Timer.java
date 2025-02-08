@@ -56,6 +56,8 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
         };
         // Warmup phase
         new Timer().repeat(getWarmupRuns(m), true, supplier, function, fPre, null);
+        
+
 
         // Timed phase
         return new Timer().repeat(m, false, supplier, function, fPre, fPost);
@@ -124,4 +126,5 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+    
 }
