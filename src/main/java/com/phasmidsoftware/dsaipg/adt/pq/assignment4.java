@@ -12,8 +12,8 @@ public class assignment4 {
 
     public static void main(String[] args) {
 
-        int M = 4095;
-        int insertions = 64000;
+        int M = 4090;
+        int insertions = 16000;
         int removals = 4000;
         Random random = new Random();
 
