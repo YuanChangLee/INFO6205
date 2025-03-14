@@ -360,7 +360,7 @@ public class ExperimentReport {
         // Process command line arguments
         int arraySize = DEFAULT_ARRAY_SIZE;
         int iterations = DEFAULT_ITERATIONS;
-        String outputDir = "./";
+        String outputDir = "./src/";
         boolean runArrayCutoffOnly = false;
         
         for (int i = 0; i < args.length; i++) {
