@@ -57,6 +57,7 @@ public class MergeSort<X extends Comparable<X>> extends SortWithComparableHelper
         X[] result = makeCopy ? Arrays.copyOf(xs, xs.length) : xs;
         sort(result, 0, result.length);
         additionalMemory(-xs.length);
+        
         return result;
     }
 
@@ -68,19 +69,61 @@ public class MergeSort<X extends Comparable<X>> extends SortWithComparableHelper
         sort(a, aux, from, to);
     }
 
+    //    private void sort(X[] a, X[] aux, int from, int to) {
+    //        Config config = helper.getConfig();
+    //        boolean insurance = config.getBoolean(MERGESORT, INSURANCE);
+    //        boolean noCopy = config.getBoolean(MERGESORT, NOCOPY);
+    //        if (to <= from + helper.cutoff()) { // XXX check that a cutoff value of 1 effectively stops the cutoff mechanism.
+    //            insertionSort.sort(a, from, to);
+    //            return;
+    //        }
+
+        // TO BE IMPLEMENTED  : implement merge sort with insurance and no-copy optimizations
+    //throw new RuntimeException("implementation missing");
+    //    }
+
     private void sort(X[] a, X[] aux, int from, int to) {
         Config config = helper.getConfig();
         boolean insurance = config.getBoolean(MERGESORT, INSURANCE);
         boolean noCopy = config.getBoolean(MERGESORT, NOCOPY);
-        if (to <= from + helper.cutoff()) { // XXX check that a cutoff value of 1 effectively stops the cutoff mechanism.
+        
+        // Use insertion sort for small subarrays
+        if (to <= from + helper.cutoff()) {
             insertionSort.sort(a, from, to);
             return;
         }
-
-        // TO BE IMPLEMENTED  : implement merge sort with insurance and no-copy optimizations
-throw new RuntimeException("implementation missing");
+        
+        int mid = from + (to - from) / 2;
+        
+        // Insurance optimization: check if array is already sorted at the midpoint
+        if (insurance && helper.less(helper.get(a, mid-1), helper.get(a, mid))) {
+            // Array is already sorted, skip merging
+            return;
+        }
+        
+        // Recursive sorting based on noCopy mode
+        if (noCopy) {
+            // In noCopy mode, we alternate arrays to avoid copying
+            sort(aux, a, from, mid);
+            sort(aux, a, mid, to);
+            // Merge from aux into a directly, no need for final copy
+            merge(aux, a, from, mid, to);
+        } else {
+            // Standard implementation with explicit copying
+            sort(a, aux, from, mid);
+            sort(a, aux, mid, to);
+            
+            // Copy data to aux array using helper methods to track copies and hits
+            for (int i = from; i < to; i++) {
+                helper.copy(helper.get(a, i), aux, i);
+            }
+            
+            // Merge from aux back into a
+            merge(aux, a, from, mid, to);
+        }
     }
 
+    
     // CONSIDER combine with MergeSortBasic, perhaps.
     private void merge(X[] sorted, X[] result, int from, int mid, int to) {
         int i = from;

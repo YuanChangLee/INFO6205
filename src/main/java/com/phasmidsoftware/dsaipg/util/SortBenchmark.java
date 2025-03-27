@@ -49,6 +49,12 @@ public class SortBenchmark {
      * @throws IOException If an IO error occurs during loading configuration or execution.
      */
     public static void main(String[] args) throws IOException {
+        if (args.length == 0) {
+            args = new String[]{"10000", "20000", "40000", "80000", "160000", "256000"
+            		
+               
+            };
+        }
         Config config = Config.load(SortBenchmark.class);
         logger.info("!!!!!!!!!!!!!!!!!!!! SortBenchmark Start !!!!!!!!!!!!!!!!!!!!\n");
         logger.info("SortBenchmark.main: version " + config.get("sortbenchmark", "version") + " with word counts: " + Arrays.toString(args));
@@ -438,6 +444,8 @@ public class SortBenchmark {
         try (Stopwatch stopwatch = new Stopwatch()) {
             runStringSortBenchmark(words, nWords, nRuns, sorter, sorter::preProcess, timeLoggers);
             logger.info("************************************************************ (" + stopwatch.lap() / 1000.0 + " sec.)");
+            
+
         }
     }
 

@@ -67,13 +67,8 @@ public class InsertionSortComparator<X> extends SortWithHelper<X> {
 
         // TO BE IMPLEMENTED 
         for(int i=from+1;i<to;i++) {
-        	X current = xs[i];
-        	int j=i-1;
-        	while(j>=from&&helper.compare(xs[j], current)>0) {
-        		xs[j+1]=xs[j];
-        		j--;
-        	}
-        	xs[j+1]=current;
+        	int j=i;
+        	while(j>from&& helper.swapStableConditional(xs, j)) j--;
         }
     }
 
